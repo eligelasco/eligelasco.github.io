@@ -206,7 +206,7 @@ function updateHeatmap() {
             .append("g")
             .attr("transform", `translate(${dimensions.width / 2}, ${dimensions.height / 2})`);
 
-    <!--
+    /*
     // set the dimensions and margins of the graph
     var margin = {top: 30, right: 30, bottom: 30, left: 30},
       width = 450 - margin.left - margin.right,
@@ -220,7 +220,7 @@ function updateHeatmap() {
     .append("g")
       .attr("transform",
             "translate(" + margin.left + "," + margin.top + ")");
-    -->
+    */
     // Labels of row and columns
     var myGroups = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
     var myVars = ["v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "v10"]
