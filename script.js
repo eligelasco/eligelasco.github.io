@@ -234,8 +234,12 @@ function updateHeatmap() {
       .domain([1,100])
     
     //Read the data
+    /*
     d3.csv("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/heatmap_data.csv", function(data) {
+    */
     
+    d3.csv("heatmap_data.csv", function(data) {
+
       svg.selectAll()
           .data(data, function(d) {return d.group+':'+d.variable;})
           .enter()
