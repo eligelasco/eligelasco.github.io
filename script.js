@@ -193,20 +193,6 @@ function updateBarChart(attribute) {
 // Update Heatmap
 function updateHeatmap() {
 
-    var dimensions = {
-            width: 800,
-            height: 800,
-            radius: Math.min(800, 800) / 2 * 0.5,
-        };
-
-        d3.select("#my_dataviz").selectAll("*").remove();
-        var svg = d3.select("#my_dataviz")
-            .attr("width", dimensions.width)
-            .attr("height", dimensions.height)
-            .append("g")
-            .attr("transform", `translate(${dimensions.width / 2}, ${dimensions.height / 2})`);
-
-    /*
     // set the dimensions and margins of the graph
     var margin = {top: 30, right: 30, bottom: 30, left: 30},
       width = 450 - margin.left - margin.right,
@@ -220,7 +206,7 @@ function updateHeatmap() {
     .append("g")
       .attr("transform",
             "translate(" + margin.left + "," + margin.top + ")");
-    */
+    
     // Labels of row and columns
     var myGroups = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
     var myVars = ["v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "v10"]
@@ -250,117 +236,15 @@ function updateHeatmap() {
     //Read the data
     d3.csv("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/heatmap_data.csv", function(data) {
     
-      // create a tooltip
-      var tooltip = d3.select("#my_dataviz")
-        .append("div")
-        .style("opacity", 0)
-        .attr("class", "tooltip")
-        .style("background-color", "white")
-        .style("border", "solid")
-        .style("border-width", "2px")
-        .style("border-radius", "5px")
-        .style("padding", "5px")
-    
-      // Three function that change the tooltip when user hover / move / leave a cell
-      var mouseover = function(d) {
-        tooltip.style("opacity", 1)
-      }
-      var mousemove = function(d) {
-        tooltip
-          .html("The exact value of<br>this cell is: " + d.value)
-          .style("left", (d3.mouse(this)[0]+70) + "px")
-          .style("top", (d3.mouse(this)[1]) + "px")
-      }
-      var mouseleave = function(d) {
-        tooltip.style("opacity", 0)
-      }
-    
-      // add the squares
       svg.selectAll()
-        .data(data, function(d) {return d.group+':'+d.variable;})
-        .enter()
-        .append("rect")
+          .data(data, function(d) {return d.group+':'+d.variable;})
+          .enter()
+          .append("rect")
           .attr("x", function(d) { return x(d.group) })
           .attr("y", function(d) { return y(d.variable) })
           .attr("width", x.bandwidth() )
           .attr("height", y.bandwidth() )
           .style("fill", function(d) { return myColor(d.value)} )
-        .on("mouseover", mouseover)
-        .on("mousemove", mousemove)
-        .on("mouseleave", mouseleave)
-    })
     
-/*
-    var margin = { top: 30, right: 30, bottom: 30, left: 30 },
-        width = 450 - margin.left - margin.right,
-        height = 450 - margin.top - margin.bottom;
-
-    var svg = d3.select("#my_dataviz")
-        .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-    var myGroups = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
-    var myVars = ["v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "v10"];
-
-    var x = d3.scaleBand()
-        .range([0, width])
-        .domain(myGroups)
-        .padding(0.01);
-    svg.append("g")
-        .attr("transform", "translate(0," + height + ")")
-        .call(d3.axisBottom(x));
-
-    var y = d3.scaleBand()
-        .range([height, 0])
-        .domain(myVars)
-        .padding(0.01);
-    svg.append("g")
-        .call(d3.axisLeft(y));
-
-    var myColor = d3.scaleLinear()
-        .range(["white", "#69b3a2"])
-        .domain([1, 100]);
-
-    d3.csv("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/heatmap_data.csv", function(data) {
-
-        var tooltip = d3.select("#my_dataviz")
-            .append("div")
-            .style("opacity", 0)
-            .attr("class", "tooltip")
-            .style("background-color", "white")
-            .style("border", "solid")
-            .style("border-width", "2px")
-            .style("border-radius", "5px")
-            .style("padding", "5px");
-
-        var mouseover = function(d) {
-            tooltip.style("opacity", 1);
-        };
-        var mousemove = function(d) {
-            tooltip
-                .html("The exact value of<br>this cell is: " + d.value)
-                .style("left", (d3.mouse(this)[0] + 70) + "px")
-                .style("top", (d3.mouse(this)[1]) + "px");
-        };
-        var mouseleave = function(d) {
-            tooltip.style("opacity", 0);
-        };
-
-        svg.selectAll()
-            .data(data, function(d) { return d.group + ':' + d.variable; })
-            .enter()
-            .append("rect")
-            .attr("x", function(d) { return x(d.group); })
-            .attr("y", function(d) { return y(d.variable); })
-            .attr("width", x.bandwidth())
-            .attr("height", y.bandwidth())
-            .style("fill", function(d) { return myColor(d.value); })
-            .on("mouseover", mouseover)
-            .on("mousemove", mousemove)
-            .on("mouseleave", mouseleave);
-    });
-*/
+    })
 }
