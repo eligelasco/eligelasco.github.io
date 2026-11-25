@@ -61,7 +61,7 @@ footer{color:var(--muted);font-size:.8rem;border-top:1px solid var(--line);paddi
 <body>
 <main>
   <h1>Dad’s Christmas List 2026</h1>
-  <p class="lede">Coffee, brewing gear, silly socks, and a few things for the bike. Where I’ve left it open, pick whichever you like within the limits shown.</p>
+  <p class="lede">Coffee brewing gear, silly socks, and a few things for the bike. Where I’ve left it open, pick whichever you like within the limits shown.</p>
   <p class="note">The examples show the kind of thing I mean. Prices were checked on November 25, 2026 and may have changed. “Mark as bought” works on your own device only; others won’t see it.</p>
   <div id="list"></div>
   <footer>Questions about sizes or choices? Just ask me.</footer>
@@ -72,10 +72,10 @@ var SOCKS = "https://www.amazon.com/s?k=SockGuy+Men%E2%80%99s+Socks&rh=p_123%3A2
 var GLOVES = "https://www.amazon.com/s?k=Handup+Gloves&rh=p_n_g-101015233022111%3A121075132011%2Cp_123%3A653568&dc&qid=1795629465&rnid=85457740011&ref=sr_nr_p_123_1&ds=v1%3AY9TAavcPGaOD61ali4z4F9muL6JQ1HU0WTgmldXhTUQ";
 
 var groups = [
-  { title: "Brewing gear", wants: [
-    { id: "v60", name: "HARIO V60 Pour Over Coffee Starter Set, Size 02", rules: "Pale Grey", price: "$22.99", link: q("HARIO V60 Pour Over Coffee Starter Set Size 02 Pale Grey"), units: ["Mark as bought"] },
+  { title: "Coffee Brewing gear", wants: [
     { id: "press", name: "French press coffee maker", rules: "Buyer’s choice. One only, up to $20.", price: "Up to $20", link: q("French press coffee maker"), browse: "Browse French presses on Amazon", units: ["Mark as bought"],
-      examples: [ ["Veken French Press, 21 oz, Dark Pewter", "$19.93"], ["QUQIYSO French Press, 21 oz, Copper", "$16.99"] ] }
+      examples: [ ["Veken French Press, 21 oz, Dark Pewter", "$19.93"], ["QUQIYSO French Press, 21 oz, Copper", "$16.99"] ] },
+    { id: "v60", name: "HARIO V60 Pour Over Coffee Starter Set, Size 02", rules: "Pale Grey", price: "$22.99", link: q("HARIO V60 Pour Over Coffee Starter Set Size 02 Pale Grey"), units: ["Mark as bought"] }
   ]},
   { title: "Coffee", wants: [
     { id: "beans", name: "Dark roast whole bean coffee, 2 bags", rules: "Buyer’s choice. Two bags, any dark roast whole bean.", link: q("dark roast whole bean coffee"), browse: "Browse dark roast whole bean coffee on Amazon", units: ["Bag 1 bought", "Bag 2 bought"],
