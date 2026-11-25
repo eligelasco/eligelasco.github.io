@@ -1,126 +1,145 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Covid-19 Data Visualization</title>
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-      body {
-        background-color: #ADD8E6;
-        font-family: 'Roboto', sans-serif;
-        color: #333;
-        text-align: center;
-        margin: 0;
-        padding: 0;
-      }
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dad’s Christmas List 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap" rel="stylesheet">
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#EEF4F0; --panel:#FFFFFF; --text:#14302A; --muted:#506B62; --line:#CFDDD5; --accent:#A8203A; --accent-ink:#FFFFFF;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#12302A; --panel:#1A3F37; --text:#EEF3EF; --muted:#9DB5AB; --line:#2E5A4E; --accent:#F0657B; --accent-ink:#12302A;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#12302A; --panel:#1A3F37; --text:#EEF3EF; --muted:#9DB5AB; --line:#2E5A4E; --accent:#F0657B; --accent-ink:#12302A;
+  color-scheme:dark;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.5}
+main{max-width:720px;margin:0 auto;padding:56px 20px 72px}
+h1{font-size:clamp(3rem,13vw,6.5rem);line-height:.92;letter-spacing:-.04em;font-weight:800;margin:0 0 20px}
+.lede{color:var(--muted);max-width:46ch;margin:0 0 8px;font-size:1.05rem}
+.note{color:var(--muted);font-size:.875rem;margin:0 0 48px;max-width:60ch}
+h2{font-size:1.25rem;font-weight:600;margin:0 0 4px}
+section{margin-bottom:44px}
+.items{list-style:none;margin:12px 0 0;padding:0;border-top:1px solid var(--line)}
+.items>li{padding:18px 0;border-bottom:1px solid var(--line)}
+.top{display:flex;justify-content:space-between;gap:16px;align-items:baseline}
+.name{font-weight:600;color:var(--text);text-decoration:none;overflow-wrap:anywhere}
+a.name:hover,.browse:hover,.ex-list a:hover{color:var(--accent);text-decoration:underline}
+.price{font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums}
+.was{display:block;text-align:right;color:var(--muted);font-weight:400;font-size:.8rem;text-decoration:line-through}
+.rules{margin:4px 0 0;color:var(--muted);font-size:.9rem}
+.browse{display:inline-block;margin-top:8px;color:var(--accent);font-weight:600;font-size:.9rem}
+.ex{margin-top:12px;padding-left:14px;border-left:3px solid var(--line)}
+.ex-label{margin:0 0 4px;color:var(--muted);font-size:.8rem}
+.ex-list{list-style:none;margin:0;padding:0}
+.ex-list li{display:flex;justify-content:space-between;gap:16px;padding:3px 0;font-size:.9rem}
+.ex-list a{color:var(--text);text-decoration:none;overflow-wrap:anywhere}
+.ex-list span{color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.bought{font:inherit;font-size:.85rem;background:transparent;color:var(--text);border:1px solid var(--line);border-radius:999px;padding:5px 14px;cursor:pointer}
+.bought:hover{border-color:var(--accent)}
+.bought[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.bought:focus-visible,a:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+li.done>.top .name{text-decoration:line-through;color:var(--muted)}
+footer{color:var(--muted);font-size:.8rem;border-top:1px solid var(--line);padding-top:16px}
+@media (max-width:480px){main{padding-top:40px}}
+</style>
+</head>
+<body>
+<main>
+  <h1>Dad’s Christmas List 2026</h1>
+  <p class="lede">Coffee, brewing gear, silly socks, and a few things for the bike. Where I’ve left it open, pick whichever you like within the limits shown.</p>
+  <p class="note">The examples show the kind of thing I mean. Prices were checked on November 25, 2026 and may have changed. “Mark as bought” works on your own device only; others won’t see it.</p>
+  <div id="list"></div>
+  <footer>Questions about sizes or choices? Just ask me.</footer>
+</main>
+<script>
+var q = function(s){ return "https://www.amazon.com/s?k=" + encodeURIComponent(s); };
+var SOCKS = "https://www.amazon.com/s?k=SockGuy+Men%E2%80%99s+Socks&rh=p_123%3A258726&dc&ds=v1%3AiuH0%2BHvZFMlzn4EMgdPGlkM%2F9MIxePSnkuffmYrpkyo&crid=MHWZM3T859HC&qid=1795629345&rnid=85457740011&sprefix=sock+guy+men%27s+socks%2Caps%2C212&ref=sr_nr_p_123_1";
+var GLOVES = "https://www.amazon.com/s?k=Handup+Gloves&rh=p_n_g-101015233022111%3A121075132011%2Cp_123%3A653568&dc&qid=1795629465&rnid=85457740011&ref=sr_nr_p_123_1&ds=v1%3AY9TAavcPGaOD61ali4z4F9muL6JQ1HU0WTgmldXhTUQ";
 
-      h1 {
-        margin: 20px 0;
-        font-size: 2em;
-        color: #222;
-      }
+var groups = [
+  { title: "Brewing gear", wants: [
+    { id: "v60", name: "HARIO V60 Pour Over Coffee Starter Set, Size 02", rules: "Pale Grey", price: "$22.99", link: q("HARIO V60 Pour Over Coffee Starter Set Size 02 Pale Grey"), units: ["Mark as bought"] },
+    { id: "press", name: "French press coffee maker", rules: "Buyer’s choice. One only, up to $20.", price: "Up to $20", link: q("French press coffee maker"), browse: "Browse French presses on Amazon", units: ["Mark as bought"],
+      examples: [ ["Veken French Press, 21 oz, Dark Pewter", "$19.93"], ["QUQIYSO French Press, 21 oz, Copper", "$16.99"] ] }
+  ]},
+  { title: "Coffee", wants: [
+    { id: "beans", name: "Dark roast whole bean coffee, 2 bags", rules: "Buyer’s choice. Two bags, any dark roast whole bean.", link: q("dark roast whole bean coffee"), browse: "Browse dark roast whole bean coffee on Amazon", units: ["Bag 1 bought", "Bag 2 bought"],
+      examples: [
+        ["Death Wish Coffee Organic Dark Roast, 16 oz", "$13.28"],
+        ["Kicking Horse Grizzly Claw Dark Roast, 10 oz", "$10.49"],
+        ["Black Rifle Coffee Tactisquatch, 12 oz", "$14.44"],
+        ["Black Rifle Coffee Freedom Fuel, 12 oz", "$14.44"],
+        ["Black Rifle Coffee Beyond Black, 12 oz", "$11.66"] ] }
+  ]},
+  { title: "Socks", wants: [
+    { id: "socks", name: "SockGuy men’s socks", rules: "Buyer’s choice of style. Size must be Large/X-Large.", link: SOCKS, browse: "Browse SockGuy men’s socks on Amazon", units: ["Mark as bought"],
+      examples: [ ["SockGuy Men’s Monkey See 3D Socks, Black", "$10.75"], ["SockGuy Men’s Gnomies Socks, Black", "$13.45"] ] }
+  ]},
+  { title: "Cycling", wants: [
+    { id: "bell", name: "ROCKBROS Bike Bell, Loud Brass Alloy", rules: "Black, fits 0.87–1.25 in handlebars", price: "$11.39", was: "$14.99", link: q("ROCKBROS Bike Bell Loud Brass Alloy Black"), units: ["Mark as bought"] },
+    { id: "gloves", name: "Handup cycling gloves", rules: "Buyer’s choice of style. Size Large, up to $17.", price: "Up to $17", link: GLOVES, browse: "Browse Handup gloves on Amazon", units: ["Mark as bought"],
+      examples: [ ["Handup SunDura Sport Cycling Gloves, Summer Camp Tie Dye", "$14.00"] ] }
+  ]}
+];
 
-      .button-container {
-        margin-bottom: 20px;
-      }
+var KEY = "christmas-list-2026-bought-v2", done = {};
+try { done = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch (e) { done = {}; }
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(done)); } catch (e) {} }
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+function allDone(w){ return w.units.every(function(u, i){ return done[w.id + ":" + i]; }); }
 
-      button {
-        padding: 10px 20px;
-        margin: 5px;
-        border: none;
-        background-color: #007BFF;
-        color: white;
-        font-size: 1em;
-        cursor: pointer;
-        border-radius: 5px;
-        transition: background-color 0.3s;
-      }
+var out = "";
+groups.forEach(function(g){
+  out += '<section><h2>' + esc(g.title) + '</h2><ul class="items">';
+  g.wants.forEach(function(w){
+    var choice = !!w.browse;
+    out += '<li data-want="' + w.id + '" class="' + (allDone(w) ? "done" : "") + '"><div class="top">';
+    out += choice ? '<span class="name">' + esc(w.name) + '</span>' : '<a class="name" href="' + esc(w.link) + '" target="_blank" rel="noopener noreferrer">' + esc(w.name) + '</a>';
+    if (w.price) out += '<span class="price">' + esc(w.price) + (w.was ? '<span class="was">' + esc(w.was) + '</span>' : '') + '</span>';
+    out += '</div><p class="rules">' + esc(w.rules) + '</p>';
+    if (choice) out += '<a class="browse" href="' + esc(w.link) + '" target="_blank" rel="noopener noreferrer">' + esc(w.browse) + '</a>';
+    if (w.examples) {
+      out += '<div class="ex"><p class="ex-label">Examples</p><ul class="ex-list">';
+      w.examples.forEach(function(e){ out += '<li><a href="' + esc(q(e[0])) + '" target="_blank" rel="noopener noreferrer">' + esc(e[0]) + '</a><span>' + esc(e[1]) + '</span></li>'; });
+      out += '</ul></div>';
+    }
+    out += '<div class="btns">';
+    w.units.forEach(function(u, i){
+      var on = !!done[w.id + ":" + i];
+      out += '<button class="bought" type="button" data-key="' + w.id + ':' + i + '" data-label="' + esc(u) + '" aria-pressed="' + on + '">' + esc(on ? "Bought" : u) + '</button>';
+    });
+    out += '</div></li>';
+  });
+  out += '</ul></section>';
+});
+document.getElementById("list").innerHTML = out;
 
-      button:hover {
-        background-color: #0056b3;
-      }
-
-      button.active-button {
-        background-color: #4CAF50;
-        color: white;
-      }
-<!--
-      .charts-container {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 20px;
-        padding: 20px;
-      }
--->
-      .chart-container {
-<!--
-        background: #fff;
--->
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        padding: 20px;
-      }
-
-      svg {
-        width: 100%;
-        height: auto;
-      }
-
-      #attribute-buttons-container {
-        margin: 20px;
-      }
-
-      #attribute-buttons-container button {
-        margin: 0 10px;
-      }
-    </style>
-  </head>
-  <body>
-    <h1>Covid-19 Data Visualization</h1>
-
-    <div class="button-container">
-      <button onclick="updateAttribute('sex')">Sex</button>
-      <button onclick="updateAttribute('age_group')">Age Group</button>
-      <button onclick="updateAttribute('race_ethnicity_combined')">Race/Ethnicity</button>
-      <button onclick="updateAttribute('hosp_yn')">Hospitalized</button>
-      <button onclick="updateAttribute('icu_yn')">ICU</button>
-      <button onclick="updateAttribute('death_yn')">Death</button>
-      <button onclick="updateAttribute('medcond_yn')">Medical Condition</button>
-    </div>
-
-    <!-- Charts -->
-    <div class="charts-container">
-      <div class="chart-container" id="piechart-container">
-        <h3>Pie Chart</h3>
-        <svg id="piechart"></svg>
-      </div>
-      <div class="chart-container" id="barchart-container">
-        <h3>Bar Chart</h3>
-        <svg id="barchart"></svg>
-      </div>
-    </div>
-    <div class="chart-container" id="heatmap-container">
-      <h3>Heatmap</h3>
-      <svg id="heatmap"></svg>
-    </div>
-
-    <script>
-      function updateAttribute(attribute) {
-        console.log(`Attribute selected: ${attribute}`);
-        // You can update the charts with the selected attribute as needed.
-        <!--
-        updatePieChart(attribute);
-        updateBarChart(attribute);
-        -->
-        updateHeatmap(attribute);
-      }
-      
-      // All charts are visible by default; no need for specific show/hide functions
-    </script>
-
-    <script src="script.js"></script>
-  </body>
+document.getElementById("list").addEventListener("click", function(e){
+  var b = e.target.closest(".bought"); if (!b) return;
+  var key = b.getAttribute("data-key"), li = b.closest("li");
+  done[key] = !done[key]; if (!done[key]) delete done[key];
+  b.setAttribute("aria-pressed", done[key] ? "true" : "false");
+  b.textContent = done[key] ? "Bought" : b.getAttribute("data-label");
+  var id = li.getAttribute("data-want"), all = true;
+  li.querySelectorAll(".bought").forEach(function(x){ if (x.getAttribute("aria-pressed") !== "true") all = false; });
+  li.classList.toggle("done", all);
+  save();
+});
+</script>
+</body>
 </html>
